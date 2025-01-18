@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 #시각화 폴더
 folder_path="D:/다른 컴퓨터/내 노트북/2024_2학기/sg/visualization/visualization"
 data_path=os.path.join(folder_path,"data")
-figure_path=os.path.join(folder_path,"figure")
+figure_path=os.path.join(folder_path,"figures")
 
 #인덱스에 해당하는 관계나 클래스를 가져오게끔 리스트 반환
 def read_relationships(read_file):
@@ -130,7 +130,6 @@ def draw_Prediction(scene_number, topk, axes, axes_index, pos):
     edge_indices = np.load(os.path.join(save_gt_path,"edge_indices.npy"))
     rel_cls = np.load(os.path.join(save_gt_path,"rel_cls.npy"))
     gt_rel_cls = np.load(os.path.join(save_gt_path,"gt_rel_cls.npy"))
-    print(rel_cls.shape, gt_rel_cls.shape)
     for i, edge in enumerate(edge_indices):
         include_predicate_flag=False
         rel_name=""
@@ -233,18 +232,19 @@ def main():
         sorted_pred_indices = np.argsort(logs[:, 2*infolist[i][1]+6])
         sorted_triplet_indices = np.argsort(logs[:, 2*infolist[i][2]+12])
         
-        if i<=2:
+        if i<=1:
             temp=sorted_obj_indices
-        elif i<=5:
+        elif i<=4:
             temp=sorted_pred_indices
         else:
             temp=sorted_triplet_indices
         
-        issave=False
+        issave=True
         for ind,j in enumerate(temp[:20]):
             draw_GT_pred(j, logs, infolist[i])
             if issave:
                 plt.savefig(os.path.join(figure_path,names[i],f"{ind}.png"))
+                "save f{i}"
             else:
                 plt.show()
     
