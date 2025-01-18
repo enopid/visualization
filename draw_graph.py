@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 from networkx.drawing.nx_agraph import graphviz_layout
 
 #시각화 폴더
-visualization_path="H:/scengraph/VL-SAT/visualization"
+folder_path="D:\다른 컴퓨터\내 노트북\2024_2학기\sg\visualization\visualization"
+data_path=os.path.join(folder_path,"data")
+figure_path=os.path.join(folder_path,"figure")
 
 #인덱스에 해당하는 관계나 클래스를 가져오게끔 리스트 반환
 def read_relationships(read_file):
@@ -25,13 +27,13 @@ def get_scenenum_to_id(read_file_path):
         scenenum_to_id.append(i["scan"])
     return scenenum_to_id
 
-pth_relationship = os.path.join(visualization_path, 'relationships.txt')
+pth_relationship = os.path.join(folder_path, 'relationships.txt')
 relationNames = read_relationships(pth_relationship)
 
-pth_class = os.path.join(visualization_path, 'classes.txt')
+pth_class = os.path.join(folder_path, 'classes.txt')
 classNames = read_relationships(pth_class)
 
-scenenum_to_id=get_scenenum_to_id(os.path.join(visualization_path, 'relationships_validation.json'))
+scenenum_to_id=get_scenenum_to_id(os.path.join(folder_path, 'relationships_validation.json'))
 
 def draw_graph(G, axes, axes_index, node_colors=None, edge_colors=None, pos=None):
     #get_label
@@ -74,7 +76,7 @@ def draw_graph(G, axes, axes_index, node_colors=None, edge_colors=None, pos=None
     return pos
 
 def draw_GT(scene_number, axes, axes_index):
-    save_gt_path=os.path.join(visualization_path,str(scene_number))
+    save_gt_path=os.path.join(data_path,str(scene_number))
     
     # 유향 그래프 생성
     G = nx.DiGraph()
@@ -102,7 +104,7 @@ def draw_GT(scene_number, axes, axes_index):
 
 
 def draw_Prediction(scene_number, topk, axes, axes_index, pos):
-    save_gt_path=os.path.join(visualization_path,str(scene_number))
+    save_gt_path=os.path.join(data_path,str(scene_number))
     
     # 유향 그래프 생성
     G = nx.DiGraph()
@@ -202,7 +204,7 @@ def draw_GT_pred(scenenumber,logs,infos=[0,0,0],save_path=None):
     plt.tight_layout(rect=[0, 0.1, 1, 1])
 
 def main():
-    logs = np.load(os.path.join(visualization_path, 'logs.npy'))
+    logs = np.load(os.path.join(folder_path, 'logs.npy'))
     names=["ACC@5_obj_cls_lowest_20scene",
            "ACC@10_obj_cls_lowest_20scene",
            "ACC@1_rel_cls_lowest_20scene",
@@ -233,11 +235,11 @@ def main():
             temp=sorted_triplet_indices
             
         
-        issave=True
+        issave=False
         for ind,j in enumerate(temp[:20]):
             draw_GT_pred(j, logs, infolist[i])
             if issave:
-                plt.savefig(os.path.join(visualization_path,names[i],f"{ind}.png"))
+                plt.savefig(os.path.join(figure_path,names[i],f"{ind}.png"))
             else:
                 plt.show()
     
