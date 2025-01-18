@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from networkx.drawing.nx_agraph import graphviz_layout
 
 #시각화 폴더
-folder_path="D:\다른 컴퓨터\내 노트북\2024_2학기\sg\visualization\visualization"
+folder_path="D:/다른 컴퓨터/내 노트북/2024_2학기/sg/visualization/visualization"
 data_path=os.path.join(folder_path,"data")
 figure_path=os.path.join(folder_path,"figure")
 
