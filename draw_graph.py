@@ -102,7 +102,6 @@ def draw_GT(scene_number, axes, axes_index):
     
     return draw_graph(G, axes, axes_index)
 
-
 def draw_Prediction(scene_number, topk, axes, axes_index, pos):
     save_gt_path=os.path.join(data_path,str(scene_number))
     
@@ -169,6 +168,7 @@ def draw_Prediction(scene_number, topk, axes, axes_index, pos):
             
     draw_graph(G, axes, axes_index, node_colors, edge_colors, pos)
 
+#GT와 pred 동시에 시각화
 def draw_GT_pred(scenenumber,logs,infos=[0,0,0],save_path=None):
     fig, axes = plt.subplots(1, 2, figsize=(12, 6))
     pos=draw_GT(scenenumber, axes, 0)
@@ -203,6 +203,7 @@ def draw_GT_pred(scenenumber,logs,infos=[0,0,0],save_path=None):
     fig.text(0.5, 0.1,text,  ha="center", va="top")
     plt.tight_layout(rect=[0, 0.1, 1, 1])
 
+#github내 figure내 파일들을 생성하는 코드
 def main():
     logs = np.load(os.path.join(folder_path, 'logs.npy'))
     names=["ACC@5_obj_cls_lowest_20scene",
@@ -213,6 +214,11 @@ def main():
            "ACC@50_tri_cls_lowest_20scene",
            "ACC@100_tri_cls_lowest_20scene",
            ]
+    
+    #각 인덱스는 첫인덱스부터 obj, predicate, triplet의 topk를 결정
+    #obj       || 0:ACC@1, 1:ACC@5, 2:ACC@10
+    #predicate || 0:ACC@1, 1:ACC@3, 2:ACC@5
+    #triplet   || 0:ACC@50, 1:ACC@100
     infolist=[[1,0,0],
               [2,0,0],
               [0,0,0],
@@ -221,7 +227,7 @@ def main():
               [0,0,0],
               [0,0,1],
               ]
-    infos=[0,6,12]
+    
     for i in range(7):
         sorted_obj_indices = np.argsort(logs[:, 2*infolist[i][0]])
         sorted_pred_indices = np.argsort(logs[:, 2*infolist[i][1]+6])
@@ -233,7 +239,6 @@ def main():
             temp=sorted_pred_indices
         else:
             temp=sorted_triplet_indices
-            
         
         issave=False
         for ind,j in enumerate(temp[:20]):
@@ -243,6 +248,5 @@ def main():
             else:
                 plt.show()
     
-
 if __name__ == '__main__':
     main()
