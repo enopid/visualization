@@ -2,7 +2,6 @@ import networkx as nx
 import numpy as np
 import os, textwrap, json
 import matplotlib.pyplot as plt
-from networkx.drawing.nx_agraph import graphviz_layout
 
 #시각화 폴더
 folder_path="D:/다른 컴퓨터/내 노트북/2024_2학기/sg/visualization/visualization"
@@ -131,6 +130,7 @@ def draw_Prediction(scene_number, topk, axes, axes_index, pos):
     edge_indices = np.load(os.path.join(save_gt_path,"edge_indices.npy"))
     rel_cls = np.load(os.path.join(save_gt_path,"rel_cls.npy"))
     gt_rel_cls = np.load(os.path.join(save_gt_path,"gt_rel_cls.npy"))
+    print(rel_cls.shape, gt_rel_cls.shape)
     for i, edge in enumerate(edge_indices):
         include_predicate_flag=False
         rel_name=""
@@ -216,8 +216,8 @@ def main():
            ]
     
     #각 인덱스는 첫인덱스부터 obj, predicate, triplet의 topk를 결정
-    #obj       || 0:ACC@1, 1:ACC@5, 2:ACC@10
-    #predicate || 0:ACC@1, 1:ACC@3, 2:ACC@5
+    #obj       || 0:ACC@1,  1:ACC@5,   2:ACC@10
+    #predicate || 0:ACC@1,  1:ACC@3,   2:ACC@5
     #triplet   || 0:ACC@50, 1:ACC@100
     infolist=[[1,0,0],
               [2,0,0],
