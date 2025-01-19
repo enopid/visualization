@@ -133,7 +133,9 @@ def draw_Prediction(scene_number, topk, axes, axes_index, pos):
     for i, edge in enumerate(edge_indices):
         include_predicate_flag=False
         rel_name=""
-        for j in range(topk[1]):
+        wrong_count=0
+        j=0
+        while(wrong_count<topk[1]):
             v=rel_cls[i][j]
             if v!=-1:
                 if not rel_name:
@@ -143,6 +145,9 @@ def draw_Prediction(scene_number, topk, axes, axes_index, pos):
                     
                 if gt_rel_cls[i][v]==1:
                     include_predicate_flag=True
+                else:
+                    wrong_count+=1
+                j+=1
             else:
                 break
                 if 1 in gt_rel_cls[i]:
@@ -150,10 +155,11 @@ def draw_Prediction(scene_number, topk, axes, axes_index, pos):
                         if v==1:
                             G.add_edge(edge[0], edge[1], label=relationNames[j+1])
                         missed_edges.append((edge[0], edge[1]))
-        if not include_predicate_flag:
-            wrong_edges.append((edge[0], edge[1]))
+        
         if rel_name:
             G.add_edge(edge[0], edge[1], label=rel_name)
+            if not include_predicate_flag:
+                wrong_edges.append((edge[0], edge[1]))
     
     node_colors = ["red" if node in red_nodes else "lightblue" for node in G.nodes]
     edge_colors = {}
@@ -227,6 +233,13 @@ def main():
               [0,0,1],
               ]
     
+    draw_GT_pred(0, logs, [0,0,0])
+    plt.show()
+    draw_GT_pred(435, logs, [0,0,0])
+    plt.show()
+    draw_GT_pred(436, logs, [0,0,0])
+    plt.show()
+    return
     for i in range(7):
         sorted_obj_indices = np.argsort(logs[:, 2*infolist[i][0]])
         sorted_pred_indices = np.argsort(logs[:, 2*infolist[i][1]+6])
@@ -239,7 +252,7 @@ def main():
         else:
             temp=sorted_triplet_indices
         
-        issave=True
+        issave=False
         for ind,j in enumerate(temp[:20]):
             draw_GT_pred(j, logs, infolist[i])
             if issave:
